@@ -1,3 +1,11 @@
+- name: Check Docker login to c8n.io (debug)
+  run: |
+    set -e
+    echo "Attempting docker login to c8n.io"
+    echo "${{ secrets.C8N_PASSWORD }}" | docker login c8n.io -u "${{ secrets.C8N_USERNA>
+    echo "Login succeeded, listing registry v2 endpoint status..."
+    curl -I -s https://c8n.io/v2/ || true
+
 name: Build and Push to c8n.io
 
 on:
@@ -11,13 +19,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check Docker login to c8n.io (debug)
-      run: |
-        set -e
-        echo "Attempting docker login to c8n.io"
-        echo "${{ secrets.C8N_PASSWORD }}" | docker login c8n.io -u "${{ secrets.C8N_USERNAME }}" --password-stdin
-        echo "Login succeeded, listing registry v2 endpoint status..."
-        curl -I -s https://c8n.io/v2/ || true
       # Step 1: Check out the source code
       - name: Checkout Code
         uses: actions/checkout@v4
